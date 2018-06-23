@@ -19,10 +19,11 @@ bool validCol(vector<int> testVector)
     {
         used[i] = false;
     }
-    for (i = 0;  i < 5; i++)
+    for (i = 0; i < 5; i++)
     {
         if (testVector[i] != 0 && used[testVector[i] - 1])
         {
+			//if number in non-zero and repeated, the test is failed
             return false;
         }
         used[i] = true;
@@ -64,39 +65,79 @@ void getSolveNumbers(vector<vector<int>> &lines)
     }
 }
 
-bool mainRecurse(int board[5][5], bool used[5][5], vector<vector<int>>visibleTowers)
+bool mainRecurse(int board[5][5], bool used[5][5],
+	vector<vector<int>>visibleTowers, int timeNum)
 {
-    int tempX, tempY;
+	vector<int> newRow;
+	int i, j;
+	int currentRow, currentCol;
+	int tempNum = 0;	
+	if (timeNum == 25)
+	{
+		printBoard(board);
+		//check if correct towers are visible
+		return true;
+	}
 
-    //if on the last step, add current position to arrays and return true
-    if (totalSteps == pow(size, 2))
-    {
-        solution[x][y] = totalSteps;
-        stepped[x][y] = true;
-        return true;
-    }
+	//do the math to find our where the next num goes
+	currentRow = timeNum / 5;
+	currentCol = timeNum % 5;
 
-        //if the adjusted coordinates are a valid move,
-        //call knights tour with that new position
-    if (possibleMove(size, tempX, tempY, stepped))
-        {
-            solution[x][y] = totalSteps;
-            stepped[x][y] = true;
-            if (knightsTour(size, tempX, tempY,
-                stepped, solution, totalSteps + 1))
-            {
-                //ultimately returns true for the whole function
-                //by breaking the recursion
-                return true;
-            }
+	for (i = 0; i < 5; i++)
+	{
+		newRow.clear();
+		if (!used[currentRow][i])
+		{
+			used[currentRow][i] = true;
+			board[currentRow][currentCol] = i + 1;
+			
 
-            //if a solution was not found by the recusive call above,
-            //reset the board to before the previous call was made
-            solution[x][y] = 0;
-            stepped[x][y] = false;
-        }
-    }
 
-    //if no solution is found, return false
-    return false;
+			cout << timeNum << " ";
+			printBoard(board);
+
+			for (j = 0; j < 5; j++)
+			{
+				cout << used[currentRow][j] << " ";
+			}
+			cout << "\n\n";
+
+
+
+			if (validCol(colToRow(board, currentCol, newRow)))
+			{
+				//cout << "recursing with timeNum as " << timeNum+1 << " and i as " << i << "\n";
+				//printBoard(board);
+				cout << timeNum << " ";
+				printBoard(board);
+
+				for (j = 0; j < 5; j++)
+				{
+					cout << used[currentRow][j] << " ";
+				}
+				cout << "\n\n";
+
+				mainRecurse(board, used, visibleTowers, timeNum + 1);
+				
+				//cout << "unrecursing with timeNum as " << timeNum << " and i as " << i << "\n";	
+			}
+			used[currentRow][i] = false;
+			board[currentRow][currentCol] = 0;
+		}
+	}
+	return false;
+}
+ 
+void printBoard(int board[5][5])
+{
+	int i, j;
+	for (i = 0; i < 5; i++)
+	{
+		for (j = 0; j < 5; j++)
+		{
+			cout << board[i][j] << " ";
+		}
+		cout << "\n";
+	}
+	cout << "\n";
 }
