@@ -17,20 +17,9 @@ int main()
         }
     }
 
-    mainRecurse(board, used, visibleTowers)
-    getSolveNumbers(visibleTowers);
+	mainRecurse(board, used, visibleTowers, 0);
+    //getSolveNumbers(visibleTowers);
     
-
-    for (i = 0; i < 5; i++)
-    {
-        for (j = 0; j < 5; j++)
-        {
-
-            //set values
-            //try to recurse down
-            //undo on way back
-        }
-    }
 
     return 0;
 }
