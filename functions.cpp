@@ -37,42 +37,41 @@ bool validCol(int testCol[5])
     return true;
 }
 
-void getSolveNumbers(vector<vector<int>> &lines)
+void getSolveNumbers(int lines[4][5])
 {
     int i;
     int inputNum;
 
     //top, left, right, bottom lines are 0, 1, 2, 3 repectively
-    lines.resize(4);
 
     cout << "Enter numbers the same way you would read them: ";
     cout << "\n(Starting at the top left, go across the row and then down, repeat.) \n";
     for (i = 0; i < 5; i++)
     {
         cin >> inputNum;
-        lines[0].push_back(inputNum);
+        lines[0][i] = inputNum;
     }
-
+	cout << "\n";
 
     //enter in the middle rows
     for (i = 0; i < 5; i++)
     {
         cin >> inputNum;
-        lines[1].push_back(inputNum);
+        lines[1][i] = inputNum;
         cin >> inputNum;
-        lines[2].push_back(inputNum);
+        lines[2][i] = inputNum;
     }
 
-    //enter in the middle rows
+    //enter in the end row
     for (i = 0; i < 5; i++)
     {
         cin >> inputNum;
-        lines[3].push_back(inputNum);
+		lines[3][i] = inputNum;
     }
 }
 
 bool mainRecurse(int board[5][5], bool used[5][5],
-	vector<vector<int>>visibleTowers, int timeNum)
+	int visibleTowers[4][5], int timeNum)
 {
 	int newRow[5];
 	int i, j;
@@ -122,7 +121,7 @@ void printBoard(int board[5][5])
 	cout << "\n";
 }
 
-bool validBoard(int board[5][5], vector<vector<int>> visibleTowers)
+bool validBoard(int board[5][5], int visibleTowers[4][5])
 {
 	int i;
 	int tempRow[5];
