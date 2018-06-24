@@ -1,17 +1,16 @@
 #include "functions.h"
 
-vector<int> colToRow(int board[5][5], int col, vector<int> fauxRow)
+int * colToRow(int board[5][5], int col, int newRow[5])
 {
     int i;
-    fauxRow.clear();
     for (i = 0; i < 5; i++)
     {
-        fauxRow.push_back(board[i][col]);
+        newRow[i] = (board[i][col]);
     }
-    return fauxRow;
+    return newRow;
 }
 
-bool validCol(vector<int> testVector)
+bool validCol(int testCol[5])
 {
     int i;
     bool used[5];
@@ -25,14 +24,14 @@ bool validCol(vector<int> testVector)
 
     for (i = 0; i < 5; i++)
     {
-        if (testVector[i] != 0 && used[testVector[i] - 1])
+        if (testCol[i] != 0 && used[testCol[i] - 1])
         {
 			//if number in non-zero and repeated, the test is failed
             return false;
         }
-		if (testVector[i] != 0)
+		if (testCol[i] != 0)
 		{
-			used[testVector[i] - 1] = true;
+			used[testCol[i] - 1] = true;
 		}
     }
     return true;
@@ -75,7 +74,7 @@ void getSolveNumbers(vector<vector<int>> &lines)
 bool mainRecurse(int board[5][5], bool used[5][5],
 	vector<vector<int>>visibleTowers, int timeNum)
 {
-	vector<int> newRow;
+	int newRow[5];
 	int i, j;
 	int currentRow, currentCol;
 	int tempNum = 0;	
@@ -94,7 +93,6 @@ bool mainRecurse(int board[5][5], bool used[5][5],
 
 	for (i = 0; i < 5; i++)
 	{
-		newRow.clear();
 		if (!used[currentRow][i])
 		{
 			used[currentRow][i] = true;
@@ -127,11 +125,11 @@ void printBoard(int board[5][5])
 bool validBoard(int board[5][5], vector<vector<int>> visibleTowers)
 {
 	int i;
-	vector<int> tempRow;
+	int tempRow[5];
 
 	for (i = 0; i < 5; i++)
 	{
-		if(!validVisible(rowToVectorRow(board[i]),
+		if(!validVisible(board[i],
 			visibleTowers[1][i], visibleTowers[2][i]))
 		{
 			return false;
@@ -141,7 +139,6 @@ bool validBoard(int board[5][5], vector<vector<int>> visibleTowers)
 	
 	for (i = 0; i < 5; i++)
 	{
-		tempRow.clear();
 		if(!validVisible(colToRow(board, i, tempRow),
 			visibleTowers[0][i], visibleTowers[3][i]))
 		{
@@ -152,7 +149,8 @@ bool validBoard(int board[5][5], vector<vector<int>> visibleTowers)
 	return true;
 }
 
-bool validVisible(vector<int> testRow, int expectedLeft, int expectedRight)
+
+bool validVisible(int testRow[5], int expectedLeft, int expectedRight)
 {
 	int visibleLeft = 1;
 	int visibleRight = 1;
@@ -180,15 +178,4 @@ bool validVisible(vector<int> testRow, int expectedLeft, int expectedRight)
 		}
 	}
 	return (visibleLeft == expectedLeft && visibleRight == expectedRight);
-}
-
-vector<int> rowToVectorRow(int row[5])
-{
-	int i;
-	vector<int> newRow;
-	for (i = 0; i < 5; i++)
-	{
-		newRow.push_back(row[i]);
-	}
-	return newRow;
 }
