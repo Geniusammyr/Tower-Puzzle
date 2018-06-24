@@ -6,9 +6,9 @@ int main()
     int i, j;
     int board[5][5];
     bool used[5][5];
-    vector<vector<int>> visibleTowers;
+    int visibleTowers[4][5];
 
-	runTime = clock();
+	
 
     //initialize arrays for solving
     for (i = 0; i < 5; i++)
@@ -21,9 +21,12 @@ int main()
     }
 
 	getSolveNumbers(visibleTowers);
+
+	runTime = clock();
+
 	mainRecurse(board, used, visibleTowers, 0);
     
-	cout << "\n" << clock() - runTime << " ms runtime";
+	cout << "\n" << clock() - runTime << " ms runtime of main recursion\n";
 
     return 0;
 }
