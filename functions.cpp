@@ -15,10 +15,14 @@ bool validCol(vector<int> testVector)
 {
     int i;
     bool used[5];
+
+	//initialize used for testing
     for (i = 0; i < 5; i++)
     {
         used[i] = false;
     }
+
+
     for (i = 0; i < 5; i++)
     {
         if (testVector[i] != 0 && used[testVector[i] - 1])
@@ -26,7 +30,10 @@ bool validCol(vector<int> testVector)
 			//if number in non-zero and repeated, the test is failed
             return false;
         }
-        used[i] = true;
+		if (testVector[i] != 0)
+		{
+			used[testVector[i] - 1] = true;
+		}
     }
     return true;
 }
@@ -74,8 +81,10 @@ bool mainRecurse(int board[5][5], bool used[5][5],
 	int tempNum = 0;	
 	if (timeNum == 25)
 	{
-		printBoard(board);
-		//check if correct towers are visible
+		if (validBoard(board, visibleTowers))
+		{
+			printBoard(board);
+		}
 		return true;
 	}
 
@@ -90,36 +99,9 @@ bool mainRecurse(int board[5][5], bool used[5][5],
 		{
 			used[currentRow][i] = true;
 			board[currentRow][currentCol] = i + 1;
-			
-
-
-			cout << timeNum << " ";
-			printBoard(board);
-
-			for (j = 0; j < 5; j++)
-			{
-				cout << used[currentRow][j] << " ";
-			}
-			cout << "\n\n";
-
-
-
 			if (validCol(colToRow(board, currentCol, newRow)))
 			{
-				//cout << "recursing with timeNum as " << timeNum+1 << " and i as " << i << "\n";
-				//printBoard(board);
-				cout << timeNum << " ";
-				printBoard(board);
-
-				for (j = 0; j < 5; j++)
-				{
-					cout << used[currentRow][j] << " ";
-				}
-				cout << "\n\n";
-
 				mainRecurse(board, used, visibleTowers, timeNum + 1);
-				
-				//cout << "unrecursing with timeNum as " << timeNum << " and i as " << i << "\n";	
 			}
 			used[currentRow][i] = false;
 			board[currentRow][currentCol] = 0;
@@ -140,4 +122,73 @@ void printBoard(int board[5][5])
 		cout << "\n";
 	}
 	cout << "\n";
+}
+
+bool validBoard(int board[5][5], vector<vector<int>> visibleTowers)
+{
+	int i;
+	vector<int> tempRow;
+
+	for (i = 0; i < 5; i++)
+	{
+		if(!validVisible(rowToVectorRow(board[i]),
+			visibleTowers[1][i], visibleTowers[2][i]))
+		{
+			return false;
+		}
+	}
+
+	
+	for (i = 0; i < 5; i++)
+	{
+		tempRow.clear();
+		if(!validVisible(colToRow(board, i, tempRow),
+			visibleTowers[0][i], visibleTowers[3][i]))
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+bool validVisible(vector<int> testRow, int expectedLeft, int expectedRight)
+{
+	int visibleLeft = 1;
+	int visibleRight = 1;
+	int tallestTower, i;
+
+	//step from left checking how many towers are visible
+	tallestTower = testRow[0];
+	for (i = 1; i < 5; i++)
+	{
+		if (testRow[i] > tallestTower)
+		{
+			visibleLeft++;
+			tallestTower = testRow[i];
+		}
+	}
+
+	//step from right checking how many towers are visible
+	tallestTower = testRow[4];
+	for (i = 3; i >= 0; i--)
+	{
+		if (testRow[i] > tallestTower)
+		{
+			visibleRight++;
+			tallestTower = testRow[i];
+		}
+	}
+	return (visibleLeft == expectedLeft && visibleRight == expectedRight);
+}
+
+vector<int> rowToVectorRow(int row[5])
+{
+	int i;
+	vector<int> newRow;
+	for (i = 0; i < 5; i++)
+	{
+		newRow.push_back(row[i]);
+	}
+	return newRow;
 }
