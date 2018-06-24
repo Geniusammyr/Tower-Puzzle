@@ -17,8 +17,9 @@ int main()
         }
     }
 
+	getSolveNumbers(visibleTowers);
 	mainRecurse(board, used, visibleTowers, 0);
-    //getSolveNumbers(visibleTowers);
+    
     
 
     return 0;
