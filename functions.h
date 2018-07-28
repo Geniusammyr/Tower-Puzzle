@@ -19,5 +19,6 @@ bool mainRecurse(int board[5][5], bool used[5][5],
 void printBoard(int board[5][5]);
 bool validBoard(int board[5][5], int visibleTowers[4][5]);
 bool validVisible(int testRow[5], int expectedLeft, int expectedRight);
+void printExample();
 
 #endif
