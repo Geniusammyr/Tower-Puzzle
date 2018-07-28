@@ -1,5 +1,7 @@
 #include "functions.h"
 
+//take in the board and a column, and turn that column into a "row"
+//so it can be checked using functions expecting a row
 int * colToRow(int board[5][5], int col, int newRow[5])
 {
     int i;
@@ -10,12 +12,15 @@ int * colToRow(int board[5][5], int col, int newRow[5])
     return newRow;
 }
 
+
+//Check that column does not contain any duplicate numbers, with zeros as
+//blanks that don't count as duplicates
 bool validCol(int testCol[5])
 {
     int i;
     bool used[5];
 
-	//initialize used for testing
+	//initialize used array for testing
     for (i = 0; i < 5; i++)
     {
         used[i] = false;
@@ -31,21 +36,27 @@ bool validCol(int testCol[5])
         }
 		if (testCol[i] != 0)
 		{
+			//set the non-zero as already seen
 			used[testCol[i] - 1] = true;
 		}
     }
     return true;
 }
 
+
+//retreives the visible tower numbers from the user,
+//and store them in an array
 void getSolveNumbers(int lines[4][5])
 {
     int i;
     int inputNum;
 
-    //top, left, right, bottom lines are 0, 1, 2, 3 repectively
+    //top, left, right, bottom lines are [0], [1], [2], and [3] repectively
 
     cout << "Enter numbers the same way you would read them: ";
     cout << "\n(Starting at the top left, go across the row and then down, repeat.) \n";
+
+	//enter the top row
     for (i = 0; i < 5; i++)
     {
         cin >> inputNum;
@@ -70,6 +81,8 @@ void getSolveNumbers(int lines[4][5])
     }
 }
 
+
+//sole recursion function
 bool mainRecurse(int board[5][5], bool used[5][5],
 	int visibleTowers[4][5], int timeNum)
 {
@@ -79,8 +92,10 @@ bool mainRecurse(int board[5][5], bool used[5][5],
 	int tempNum = 0;	
 	if (timeNum == 25)
 	{
+		//if completed board that fits visible towers
 		if (validBoard(board, visibleTowers))
 		{
+			//spit the board out to user
 			printBoard(board);
 		}
 		return true;
@@ -107,6 +122,8 @@ bool mainRecurse(int board[5][5], bool used[5][5],
 	return false;
 }
  
+
+//print the board(solution)
 void printBoard(int board[5][5])
 {
 	int i, j;
@@ -121,11 +138,14 @@ void printBoard(int board[5][5])
 	cout << "\n";
 }
 
+
+//check is the current board state is possible using visible towers
 bool validBoard(int board[5][5], int visibleTowers[4][5])
 {
 	int i;
 	int tempRow[5];
 
+	//check cols to see  if valid
 	for (i = 0; i < 5; i++)
 	{
 		if(!validVisible(board[i],
@@ -135,7 +155,7 @@ bool validBoard(int board[5][5], int visibleTowers[4][5])
 		}
 	}
 
-	
+	//convert cols to "rows" and check if they are valid
 	for (i = 0; i < 5; i++)
 	{
 		if(!validVisible(colToRow(board, i, tempRow),
@@ -149,6 +169,7 @@ bool validBoard(int board[5][5], int visibleTowers[4][5])
 }
 
 
+//check if a given line of numbers is a possible solution
 bool validVisible(int testRow[5], int expectedLeft, int expectedRight)
 {
 	int visibleLeft = 1;
@@ -177,4 +198,57 @@ bool validVisible(int testRow[5], int expectedLeft, int expectedRight)
 		}
 	}
 	return (visibleLeft == expectedLeft && visibleRight == expectedRight);
+}
+
+
+//spit out an example of a proper run of the programs
+void printExample()
+{
+	int i, j;
+	int visableTowers[4][5] = { { 2, 3, 2, 1, 2 },
+		{3, 1, 3, 2, 2}, {2, 4, 3, 4, 1}, {2, 2, 3, 4, 1} };
+
+	int solution[5][5] = { {2, 1, 3, 5, 4}, {5, 4, 1, 3, 2},
+		{1, 2, 5, 4, 3}, {3, 5, 4, 2, 1}, {4, 3, 2, 1, 5} };
+
+	int exampleInput[20] = { 2, 3, 2, 1, 2, 3, 2, 1, 4, 3,
+		3, 2, 4, 2, 1, 2, 2, 3, 4, 1 };
+
+	//output example input as a single line of numbers
+	cout << "Example input:\n";
+	for (i = 0; i < 20; i++)
+	{
+		cout << exampleInput[i] << " ";
+	}
+
+	//output example input as a square
+	cout << "\n\n";
+	for (i = 0; i < 5; i++)
+	{
+		cout << visableTowers[0][i] << "   ";;
+	}
+	cout << "\n";
+	for (i = 0; i < 5; i++)
+	{
+		cout << visableTowers[1][i];
+		cout << "\t\t";
+		cout << visableTowers[2][i];
+		cout << "\n";
+	}
+	for (i = 0; i < 5; i++)
+	{
+		cout << visableTowers[3][i] << "   ";
+	}
+	cout << "\n\nExample Output:\n\n";
+
+	//print example solution output
+	for (i = 0; i < 5; i++)
+	{
+		for (j = 0; j < 5; j++)
+		{
+			cout << solution[i][j] << " ";
+		}
+		cout << "\n";
+	}
+	cout << "\n";
 }
