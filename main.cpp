@@ -8,7 +8,6 @@ int main()
     bool used[5][5];
     int visibleTowers[4][5];
 
-	
 
     //initialize arrays for solving
     for (i = 0; i < 5; i++)
@@ -20,13 +19,15 @@ int main()
         }
     }
 
+	printExample();
+
 	getSolveNumbers(visibleTowers);
 
 	runTime = clock();
 
 	mainRecurse(board, used, visibleTowers, 0);
     
-	cout << "\n" << clock() - runTime << " ms runtime of main recursion\n";
+	cout << "\n" << clock() - runTime << " ms runtime.\n";
 
     return 0;
 }
