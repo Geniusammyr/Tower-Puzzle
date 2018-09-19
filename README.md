@@ -10,15 +10,7 @@ This program assumes they are read left to right top to bottom.
 EX:
 2 3 2 1 2 3 2 1 4 3 3 2 4 2 1 2 2 3 4 1 
 
-Would be the input for the example linked above, when formatted it would look like:
-
-2   3   2   1   2   
-3		            2
-1		            4
-3		            3
-2		            4
-2		            1
-2   2   3   4   1 
+Is the input for the example problem found in the link.
 
 Output:
 Output is a 5x5 grid of a possible solved puzzle solution. If multiple exist, they will all be printed, seperated by empty lines. If no solution exists, nothing will be outputed.
